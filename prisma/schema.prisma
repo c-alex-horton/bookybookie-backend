@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id              Int            @id @default(autoincrement())
+  title           String
+  publicationDate DateTime
+  ISBN            String
+  pages           Int
+  status          String
+  genres          GenreOnBook[]
+  authors         AuthorOnBook[]
+  UserBooks       User?          @relation("UserBooks", fields: [userId], references: [id])
+  userId          Int?
+  UserWishlist    User?          @relation("UserWishlist", fields: [userId], references: [id])
+  Tag             Tag?           @relation(fields: [tagId], references: [id])
+  tagId           Int?
+}
+
+model Author {
+  id      Int            @id @default(autoincrement())
+  name    String
+  country String
+  books   AuthorOnBook[]
+}
+
+model AuthorOnBook {
+  book     Book   @relation(fields: [bookId], references: [id])
+  bookId   Int
+  author   Author @relation(fields: [authorId], references: [id])
+  authorId Int
+
+  @@id([bookId, authorId])
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String
+  books Book[]
+}
+
+model Genre {
+  id    Int           @id @default(autoincrement())
+  name  String
+  books GenreOnBook[]
+}
+
+model GenreOnBook {
+  book    Book  @relation(fields: [bookId], references: [id])
+  bookId  Int
+  genre   Genre @relation(fields: [genreId], references: [id])
+  genreId Int
+
+  @@id([bookId, genreId])
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String
+  email    String
+  books    Book[] @relation("UserBooks")
+  wishlist Book[] @relation("UserWishlist")
+}
