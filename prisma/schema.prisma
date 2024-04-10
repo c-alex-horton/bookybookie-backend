@@ -13,10 +13,12 @@ datasource db {
 model Book {
   id              Int            @id @default(autoincrement())
   title           String
-  publicationDate DateTime
-  ISBN            String
-  pages           Int
-  status          String
+  publicationDate DateTime?
+  description     String?
+  notes           String?
+  ISBN            String?
+  pages           Int?
+  status          String?
   genres          GenreOnBook[]
   authors         AuthorOnBook[]
   UserBooks       User?          @relation("UserBooks", fields: [userId], references: [id])
@@ -29,7 +31,7 @@ model Book {
 model Author {
   id      Int            @id @default(autoincrement())
   name    String
-  country String
+  country String?
   books   AuthorOnBook[]
 }
 
