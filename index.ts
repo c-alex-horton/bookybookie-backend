@@ -1,10 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
+import books from "./src/routes/books"
 
 dotenv.config();
 
 const app = express();
 const port = parseInt(process.env.PORT || "3000");
+
+// Routes
+app.use('/books', books)
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Whoop WHoop! I'm alive!");
