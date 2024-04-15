@@ -22,20 +22,38 @@ router.get('/:id', async (req, res) => {
     res.status(200).json(book)
 })
 
+
+
+const ProcessAuthros = (authors: any) => {
+    if (!authors) {
+        return []
+    } else {
+        return authors.map((author: any) => ({
+            where: { name: author },
+            create: { name: author, country: "" }
+        }));
+    }
+}
+
+const ProcessGenres = (genres: any) => {
+    if (!genres) {
+        return []
+    } else {
+        return genres.map((genre: any) => ({
+            where: { name: genre },
+            create: { name: genre }
+        }));
+    }
+}
+
 router.post('/', async (req, res) => {
     // Create book
     const { title, publicationDate, ISBN, pages, status, genres, authors, tags } = req.body
 
     // Process authors and genres in case they are not in the database
-    const processedAuthors = authors.map((author: any) => ({
-        where: { name: author },
-        create: { name: author, country: "" }
-    }));
+    const processedAuthors = ProcessAuthros(authors)
 
-    const processedGenres = genres.map((genre: any) => ({
-        where: { name: genre },
-        create: { name: genre }
-    }));
+    const processedGenres = ProcessGenres(genres)
 
     const book = await prisma.book.create({
         data: {
@@ -63,15 +81,9 @@ router.put('/:id', async (req, res) => {
     const { title, publicationDate, ISBN, pages, status, genres, authors, tags } = req.body
 
     // Process authors and genres in case they are not in the database
-    const processedAuthors = authors.map((author: any) => ({
-        where: { name: author },
-        create: { name: author, country: "" }
-    }));
+    const processedAuthors = ProcessAuthros(authors)
 
-    const processedGenres = genres.map((genre: any) => ({
-        where: { name: genre },
-        create: { name: genre }
-    }));
+    const processedGenres = ProcessGenres(genres)
 
     const book = await prisma.book.update({
         where: {
