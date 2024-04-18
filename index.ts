@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import books from "./src/routes/books"
 import genres from "./src/routes/genres"
 import authors from "./src/routes/authors"
+import tags from "./src/routes/tags"
 
 
 dotenv.config();
@@ -16,6 +17,7 @@ const port = parseInt(process.env.PORT || "3000");
 app.use('/books', books)
 app.use('/genres', genres)
 app.use('/authors', authors)
+app.use('/tags', tags)
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Whoop WHoop! I'm alive!");

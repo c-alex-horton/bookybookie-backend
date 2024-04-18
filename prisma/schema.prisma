@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Book {
-  id              Int            @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   title           String
   publicationDate DateTime?
   description     String?
@@ -19,59 +19,31 @@ model Book {
   ISBN            String?
   pages           Int?
   status          String?
-  genres          GenreOnBook[]
-  authors         AuthorOnBook[]
-  UserBooks       User?          @relation("UserBooks", fields: [userId], references: [id])
+  genres          Genre[]
+  authors         Author[]
+  UserBooks       User?     @relation("UserBooks", fields: [userId], references: [id])
   userId          Int?
-  UserWishlist    User?          @relation("UserWishlist", fields: [userId], references: [id])
-  tags            TagOnBook[]
-  tagId           Int?
+  UserWishlist    User?     @relation("UserWishlist", fields: [userId], references: [id])
+  tags            Tag[]
 }
 
 model Author {
-  id      Int            @id @default(autoincrement())
-  name    String
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
   country String?
-  books   AuthorOnBook[]
-}
-
-model AuthorOnBook {
-  book     Book   @relation(fields: [bookId], references: [id])
-  bookId   Int
-  author   Author @relation(fields: [authorId], references: [id])
-  authorId Int
-
-  @@id([bookId, authorId])
+  books   Book[]
 }
 
 model Tag {
-  id    Int         @id @default(autoincrement())
-  name  String
-  books TagOnBook[]
-}
-
-model TagOnBook {
-  book   Book @relation(fields: [bookId], references: [id])
-  bookId Int
-  tag    Tag  @relation(fields: [tagId], references: [id])
-  tagId  Int
-
-  @@id([bookId, tagId])
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  books Book[]
 }
 
 model Genre {
-  id    Int           @id @default(autoincrement())
-  name  String
-  books GenreOnBook[]
-}
-
-model GenreOnBook {
-  book    Book  @relation(fields: [bookId], references: [id])
-  bookId  Int
-  genre   Genre @relation(fields: [genreId], references: [id])
-  genreId Int
-
-  @@id([bookId, genreId])
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  books Book[]
 }
 
 model User {

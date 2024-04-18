@@ -8,7 +8,11 @@ const prisma = new PrismaClient()
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-    const authors = await prisma.author.findMany()
+    const authors = await prisma.author.findMany({
+        include: {
+            books: true
+        }
+    })
     res.status(200).json(authors)
 })
 
@@ -17,6 +21,9 @@ router.get('/:id', async (req, res) => {
     const author = await prisma.author.findUnique({
         where: {
             id: Number(id)
+        },
+        include: {
+            books: true
         }
     })
     res.status(200).json(author)

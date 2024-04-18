@@ -8,7 +8,11 @@ const prisma = new PrismaClient()
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-    const genres = await prisma.genre.findMany()
+    const genres = await prisma.genre.findMany({
+        include: {
+            books: true
+        }
+    })
     res.status(200).json(genres)
 })
 
@@ -17,6 +21,9 @@ router.get('/:id', async (req, res) => {
     const genre = await prisma.genre.findUnique({
         where: {
             id: Number(id)
+        },
+        include: {
+            books: true
         }
     })
     res.status(200).json(genre)
